@@ -1,0 +1,9 @@
+dist/
+*.zip
+node_modules/
+.env
+.env.*
+!.env.example
+probe.txt
+.DS_Store
+Thumbs.db

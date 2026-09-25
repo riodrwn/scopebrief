@@ -1,0 +1,13 @@
+<!doctype html><html lang="id"><head><base href="/src/"><script src="/tests/harness.js"></script><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="stylesheet" href="popup.css"><title>ScopeBrief</title></head><body>
+<header><span class="logo">SB</span><div><h1>ScopeBrief</h1><p>Bug bounty context, ready for AI.</p></div><span class="badge">LOCAL</span></header>
+<main><label for="program">Program tersimpan</label><select id="program"><option value="">Belum ada tangkapan</option></select>
+<div class="card"><h2>Ambil konteks program</h2><p>Buka guidelines atau scope. Tunggu isinya muncul, lalu ambil halaman. Pilih teks di halaman untuk mengambil bagian tertentu saja.</p>
+<label for="kind">Isi halaman ini</label><select id="kind"><option value="guidelines">Guidelines / rules / vulnerability categories</option><option value="asset_scope">Daftar scope aset</option></select>
+<button id="capture" class="primary">＋ Ambil halaman aktif</button></div>
+<p id="status" role="status" aria-live="polite">Tidak mengirim data ke server atau AI.</p>
+<div class="row"><h2>Preview ekspor</h2><span id="count">0 halaman</span></div>
+<p class="notice">Periksa pagination dan bagian yang dilipat. Kelengkapan perlu diverifikasi. Tangkapan ulang URL dan jenis yang sama mengganti versi sebelumnya.</p>
+<textarea id="preview" readonly spellcheck="false" aria-label="Preview Markdown" placeholder="Hasil ekstraksi akan tampil di sini…"></textarea>
+<div class="actions"><button id="md" disabled>↓ Markdown</button><button id="json" disabled>↓ JSON</button><button id="remove" class="danger" disabled>Hapus lokal</button></div>
+<details><summary>Privasi & cara kerja</summary><p>Hanya membaca halaman saat tombol diklik. Data disimpan di storage lokal extension, tanpa cookies, token, analytics, atau koneksi AI. Periksa konten privat sebelum dibagikan. Parser menggunakan struktur heading; situs generik juga dapat ditangkap.</p></details>
+</main><script type="module" src="popup.js"></script></body></html>
