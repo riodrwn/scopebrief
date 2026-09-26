@@ -29,7 +29,7 @@ test('failed CSV returns explicit partial result without losing bounty distincti
  const result=await capture(doc,base+'/policy_scopes',async()=>{throw Error('Login required');});
  assert.equal(result.scope_coverage.mode,'partial');assert.equal(result.assets.length,1);
  assert.equal(result.assets[0].eligible_for_bounty,false);assert.equal(result.assets[0].scope,'in_scope');
- assert.match(result.warnings[0],/Hanya baris tabel/);
+ assert.match(result.warnings[0],/Only currently loaded/);
 });
 test('CSV request cannot target another program or host',async()=>{
  for(const link of ['https://evil.test/file.csv','https://hackerone.com/teams/other/assets/download_csv.csv']){
@@ -50,7 +50,7 @@ test('guidelines and scope merge; removed targets do not survive refresh',async(
  assert.match(brief,/Asset-specific instructions/);assert.ok(!brief.includes('Ignore navigation'));
 });
 test('unloaded page fails and unknown booleans never grant scope',async()=>{
- await assert.rejects(capture(parseHTML('<main>Loading</main>').document,base),/belum dimuat/);
+ await assert.rejects(capture(parseHTML('<main>Loading</main>').document,base),/have not loaded/);
  assert.equal(csvAssets(csv.replace('false,true','false,unknown'))[0].scope,'unknown');
 });
 test('one guidelines capture fetches scope automatically and exports both',async()=>{
@@ -62,7 +62,7 @@ test('one guidelines capture fetches scope automatically and exports both',async
  const data=assemble(identity(base),records);
  assert.equal(data.assets.length,2);
  assert.match(markdown(data),/3 requests per second/);
- assert.doesNotMatch(markdown(data),/Scope aset belum diambil/);
+ assert.doesNotMatch(markdown(data),/Asset scope belum diambil/);
 });
 test('automatic CSV failure preserves policy but removes stale scope with warning',async()=>{
  const old=await capture(scopeDoc(),base+'/policy_scopes',response);
@@ -71,6 +71,6 @@ test('automatic CSV failure preserves policy but removes stale scope with warnin
  const data=assemble(identity(base),records);
  assert.equal(data.assets.length,0);
  assert.ok(data.sections.length);
- assert.match(markdown(data),/Scope otomatis gagal/);
+ assert.match(markdown(data),/Automatic scope capture failed/);
  assert.equal(records[1].scope_coverage.mode,'unavailable');
 });

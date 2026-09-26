@@ -1,10 +1,10 @@
 # ScopeBrief
 
-Local Chrome and Firefox extension for readable bug bounty program briefs. Version 0.3.2 adds structured HackerOne briefs alongside Bugcrowd, with NBA and Viator as verified source examples. It exports Markdown and JSON without sending page content to an AI or backend.
+Local Chrome and Firefox extension for readable bug bounty program briefs. Version 0.3.3 adds structured HackerOne briefs alongside Bugcrowd, with NBA and Viator as verified source examples. It exports Markdown and JSON without sending page content to an AI or backend.
 
 ## HackerOne workflow
 
-1. Open the program guidelines, wait for the policy to load, and click **Ambil program**.
+1. Open the program guidelines, wait for the policy to load, and click **Capture program**.
 2. Scope is fetched automatically from the official program CSV; no Scope tab visit is required.
 3. Review the combined brief and download Markdown or JSON.
 
@@ -16,7 +16,7 @@ The brief preserves Rules of Engagement, vulnerability inclusions/exclusions, po
 
 1. Install or reload the extension, then open the program's **Details** tab.
 2. Wait for the target tables and guidelines to load.
-3. Click **Ambil program**. Bugcrowd scope and policy sections are detected automatically.
+3. Click **Capture program**. Bugcrowd scope and policy sections are detected automatically.
 4. Review the rendered **Preview**, or switch to **Markdown** to inspect the source.
 5. Download `.md` or `.json`.
 
@@ -72,7 +72,7 @@ To inspect the UI with synthetic data, serve the repository locally and open `/t
 
 ## Privacy
 
-Permissions: `activeTab`, `scripting`, `storage`. Extraction runs only on explicit capture. No direct cookie or token access, analytics, remote scripts, or AI requests. HackerOne capture makes a same-origin GET to the program’s official CSV using the browser session; no page content is sent to a third-party backend. Program text, including any testing credentials in it, is saved locally and included in exports; review private content before sharing. **Hapus lokal** removes the selected program's stored captures, but not downloaded files.
+Permissions: `activeTab`, `scripting`, `storage`. Extraction runs only on explicit capture. No direct cookie or token access, analytics, remote scripts, or AI requests. HackerOne capture makes a same-origin GET to the program’s official CSV using the browser session; no page content is sent to a third-party backend. Program text, including any testing credentials in it, is saved locally and included in exports; review private content before sharing. **Delete local data** removes the selected program's stored captures, but not downloaded files.
 
 Page content is untrusted reference data, not executable instructions. Preview uses DOM text nodes rather than source HTML. This does not guarantee downstream AI models are immune to prompt injection.
 

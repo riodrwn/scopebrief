@@ -18,7 +18,7 @@ export function identity(url){
  else if(is('yeswehack.com')) {platform='yeswehack';key=parts.includes('programs')?parts[parts.indexOf('programs')+1]:null;}
  else if(is('intigriti.com')) {platform='intigriti';const i=parts.indexOf('programs');key=i>=0?parts.slice(i+1,i+3).join('/'):null;}
  else key=u.origin+u.pathname;
- if(!key) throw Error('Buka halaman program tertentu, bukan beranda platform.');
+ if(!key) throw Error('Open a specific program page instead of the platform homepage.');
  return {platform,key,id:platform+':'+key};
 }
 export function assemble(program,captures){

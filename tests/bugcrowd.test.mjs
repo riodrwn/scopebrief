@@ -36,7 +36,7 @@ test('instructions outside li, heading-only warnings, links, and nondisclosure s
  assert.match(text,/# Sample — Bug Bounty Brief/);
 });
 test('unloaded page and non-details views fail explicitly',()=>{
- assert.throws(()=>capture(parseHTML('<main>Loading</main>').document,url),/belum siap/);
+ assert.throws(()=>capture(parseHTML('<main>Loading</main>').document,url),/not ready/);
  assert.throws(()=>capture(fixture(),url+'/announcements'),/Details/);
 });
 test('Markdown retains nested lists and table delimiter rows',()=>{

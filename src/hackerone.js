@@ -30,9 +30,9 @@
     const response = await request(csvURL,{credentials:'same-origin',redirect:'error',signal:AbortSignal.timeout(15000)});
     if (!response.ok) throw Error(`CSV HTTP ${response.status}.`);
     const source = await response.text();
-    if (source.length > 10_000_000) throw Error('CSV melebihi batas ukuran.');
+    if (source.length > 10_000_000) throw Error('CSV exceeds the size limit.');
     const assets = csvAssets(source);
-    if (!assets.length) throw Error('CSV tidak berisi aset.');
+    if (!assets.length) throw Error('CSV contains no assets.');
     return assets;
   }
   function csvAssets(source) {
@@ -57,12 +57,12 @@
   }
   async function capture(doc = document, url = location.href, request = fetch) {
     const u = new URL(url), parts = u.pathname.split('/').filter(Boolean), handle = parts[0];
-    if (u.hostname !== 'hackerone.com' || !handle || (parts.length > 1 && parts[1] !== 'policy_scopes')) throw Error('Buka Program guidelines atau Scope program HackerOne.');
+    if (u.hostname !== 'hackerone.com' || !handle || (parts.length > 1 && parts[1] !== 'policy_scopes')) throw Error('Open the HackerOne program guidelines or Scope page.');
     const base = {url:u.origin + u.pathname,program_name:text(doc.title).split(/\s+\|\s+/)[0].replace(/\s*[—-]\s*HackerOne.*$/i,'') || handle,title:doc.title,captured_at:new Date().toISOString(),adapter:'hackerone_v3',method:'rendered_document',warnings:[],sections:[],assets:[],links:[]};
     const main = doc.querySelector('main') || doc;
     if (parts[1] !== 'policy_scopes') {
       const policy = [...main.querySelectorAll('.interactive-markdown.markdownable')].filter(e => !e.closest('[hidden],[aria-hidden="true"]')).sort((a,b) => b.textContent.length-a.textContent.length)[0];
-      if (!policy || !text(policy.textContent)) throw Error('Guidelines belum dimuat atau struktur halaman berubah.');
+      if (!policy || !text(policy.textContent)) throw Error('Guidelines have not loaded or the page layout has changed.');
       base.kind = 'guidelines';
       const copy=policy.cloneNode(true);
       for(const list of [...copy.children].filter(e=>e.tagName==='UL')){
@@ -84,7 +84,7 @@
         scope.assets = await fetchAssets(csvURL,request);
         scope.scope_coverage = {mode:'csv_snapshot',expected_count:null,captured_count:scope.assets.length};
       } catch(error) {
-        scope.warnings.push(`Scope otomatis gagal (${error.message}). Coba Ambil program lagi atau buka Scope untuk mengambil baris yang terlihat.`);
+        scope.warnings.push(`Automatic scope capture failed (${error.message}). Try Capture program again or open Scope to capture visible rows.`);
       }
       scope.text_length = JSON.stringify(scope.assets).length;
       base.related_captures = [scope];
@@ -92,25 +92,25 @@
     }
     base.kind = 'asset_scope';
     const table = [...main.querySelectorAll('table')].find(t => /Asset name/.test(t.textContent) && /Coverage/.test(t.textContent));
-    if (!table) throw Error('Tabel Scope belum dimuat atau struktur halaman berubah.');
+    if (!table) throw Error('The Scope table has not loaded or the page layout has changed.');
     const range = (main.innerText || main.textContent).match(/\b(\d+)\s*[-–]\s*(\d+)\s+of\s+([\d,]+)/);
     base.pagination = range?.[0] || null;
     const expected = range ? Number(range[3].replace(/,/g,'')) : null;
     base.scope_coverage = {mode:'partial',expected_count:expected,captured_count:0};
     const link = [...main.querySelectorAll('a[href]')].find(a => text(a.textContent) === 'Download CSV');
     try {
-      if (!link) throw Error('Link CSV resmi tidak ditemukan.');
+      if (!link) throw Error('Official CSV link not found.');
       const csvURL = new URL(link.getAttribute('href'), url);
-      if (csvURL.origin !== u.origin || csvURL.pathname !== `/teams/${handle}/assets/download_csv.csv` || csvURL.search) throw Error('Link CSV tidak cocok dengan program ini.');
+      if (csvURL.origin !== u.origin || csvURL.pathname !== `/teams/${handle}/assets/download_csv.csv` || csvURL.search) throw Error('CSV link does not match this program.');
       base.assets = await fetchAssets(csvURL.href,request);
       base.method = 'official_csv'; base.csv_source = csvURL.href;
       base.scope_coverage.mode = 'csv_snapshot';
-      if (expected !== null && base.assets.length !== expected) base.warnings.push('Jumlah CSV berbeda dari total tabel. Periksa filter dan pembaruan scope.');
+      if (expected !== null && base.assets.length !== expected) base.warnings.push('CSV count differs from the table total. Check filters and scope updates.');
     } catch (error) {
       base.assets = tableAssets(table);
-      base.warnings.push(`CSV tidak tersedia (${error.message}). Hanya baris tabel yang sedang dimuat diambil; instruksi detail aset mungkin belum tercakup.`);
+      base.warnings.push(`CSV unavailable (${error.message}). Only currently loaded table rows were captured; detailed asset instructions may be missing.`);
     }
-    if (!base.assets.length) throw Error('Tidak ada aset scope yang berhasil dibaca.');
+    if (!base.assets.length) throw Error('No scope assets could be read.');
     base.scope_coverage.captured_count = base.assets.length;
     base.text_length = JSON.stringify(base.assets).length;
     return base;

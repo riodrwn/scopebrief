@@ -10,9 +10,9 @@ export function hackeroneMarkdown(data) {
   const sections=policy?.sections || [];
   const inCount=assets.filter(a=>a.scope==='in_scope').length,outCount=assets.filter(a=>a.scope==='out_of_scope').length;
   const parts=[`# ${escape(name)} — Bug Bounty Brief`,`**Platform:** HackerOne  \n**Program:** ${escape(data.program.key)}  \n**Source:** ${source}`];
-  if (!policy) parts.push('> Program guidelines belum diambil. Buka tab Program guidelines dan ambil ulang sebelum menggunakan brief ini.');
+  if (!policy) parts.push('> Program guidelines have not been captured. Open Program guidelines and capture again before using this brief.');
   for (const s of sections) parts.push('---',`## ${escape(s.heading)}`,s.markdown ?? s.text);
-  if (!scopeCaptures.length) parts.push('> Scope aset belum diambil. Buka tab Scope dan klik Ambil program.');
+  if (!scopeCaptures.length) parts.push('> Assets have not been captured. Capture again from Program guidelines to fetch scope automatically.');
   for (const [status,heading] of [['in_scope','In-Scope Assets'],['out_of_scope','Out-of-Scope Assets'],['unknown','Assets with Unverified Scope']]) {
     const scoped=assets.filter(a=>a.scope===status);
     if(status==='unknown'&&!scoped.length)continue;

@@ -79,11 +79,11 @@
   }
   function capture(doc = document, url = location.href) {
     const u = new URL(url);
-    if (!(u.hostname === 'bugcrowd.com' || u.hostname.endsWith('.bugcrowd.com'))) throw Error('Buka halaman program Bugcrowd.');
-    if (!/^\/engagements\/[^/]+\/?$/.test(u.pathname)) throw Error('Buka tab Details pada program Bugcrowd, lalu ambil ulang.');
+    if (!(u.hostname === 'bugcrowd.com' || u.hostname.endsWith('.bugcrowd.com'))) throw Error('Open a Bugcrowd program page.');
+    if (!/^\/engagements\/[^/]+\/?$/.test(u.pathname)) throw Error('Open the Bugcrowd program Details tab, then capture again.');
     const panel = doc.querySelector('[role="tabpanel"]') || doc.querySelector('main');
     const groups = [...(panel?.querySelectorAll('.cc-target-grp') || [])];
-    if (!groups.length) throw Error('Tabel target belum siap atau struktur Bugcrowd berubah. Tunggu tab Details selesai dimuat.');
+    if (!groups.length) throw Error('Target tables are not ready or the Bugcrowd layout has changed. Wait for Details to finish loading.');
     const warnings = [], assets = [], sections = [], groupInfo = [];
     for (const [index, group] of groups.entries()) {
       const name = clean(group.querySelector('.bc-panel__title')?.textContent) || `Target group ${index + 1}`;
