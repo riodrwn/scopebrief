@@ -23,7 +23,7 @@ $('capture').onclick=async()=>{
   show('Fetching program guidelines and scope…');
   const results=await api.scripting.executeScript({target:{tabId:tab.id},files:['bugcrowd.js','hackerone.js','yeswehack.js','capture.js']});const capture=results[0]?.result;
   if(!capture?.text_length)throw Error('No readable content. Wait for the page to finish loading.');
-  const program=identity(capture.url);capture.kind=capture.adapter==='hackerone_v3'?capture.kind:['bugcrowd_v2','yeswehack_v1'].includes(capture.adapter)?'program':capture.adapter==='hackerone_assets'?'asset_scope':$('kind').value;
+  const program=identity(capture.url);
   const u=new URL(capture.url);capture.key=u.origin+u.pathname+u.search+u.hash+'|'+capture.kind+'|'+(capture.pagination||'');
   const previous=records[program.id]||{program,captures:[]};
   const record={program,captures:mergeCaptures(previous.captures,capture)};

@@ -1,6 +1,6 @@
 # ScopeBrief
 
-Local Chrome and Firefox extension for readable bug bounty program briefs. Version 0.4.0 adds structured HackerOne briefs alongside Bugcrowd, with NBA and Viator as verified source examples. It exports Markdown and JSON without sending page content to an AI or backend.
+Local Chrome and Firefox extension for readable bug bounty program briefs. Version 0.4.1 adds structured HackerOne briefs alongside Bugcrowd, with NBA and Viator as verified source examples. It exports Markdown and JSON without sending page content to an AI or backend.
 
 ## HackerOne workflow
 
@@ -67,7 +67,7 @@ To inspect the UI with synthetic data, serve the repository locally and open `/t
 - Announcements, changelog and linked policies are not fetched. Current scope labels are authoritative for categorization; an older example document is not substituted.
 - The preview supports the primary brief format; the downloaded Markdown preserves richer constructs such as nested lists and tables.
 - HackerOne NBA validation compared 31 rendered table rows against the official 457-row CSV with no mismatches: 428 in-scope and 29 out-of-scope assets at capture time. Guidelines produced 15 sections. Counts are not hardcoded. Tests also cover multiline CSV instructions, CSV failure, unknown scope, and stale asset replacement.
-- Intigriti remains experimental generic extraction.
+- Capture is supported only for HackerOne, Bugcrowd, and YesWeHack.
 - Completeness remains `unverified`. Recheck the source before testing, especially exceptions to wildcards and restrictions within in-scope assets.
 
 ## Privacy
@@ -85,6 +85,6 @@ Bugcrowd exports omit Page Structure Map, Program Overview, Eligibility, Ratings
 
 ## YesWeHack workflow
 
-Open the program page, wait for Scopes and Vulnerability types to load, then click Capture program. Version 0.4.0 captures Scopes, Out of scopes, Qualifying vulnerabilities, and Non-qualifying vulnerabilities. Rewards and the general description are omitted. Missing sections generate warnings; pagination is not traversed automatically. New captures replace older snapshots for the program.
+Open the program page, wait for Scopes and Vulnerability types to load, then click Capture program. Version 0.4.1 captures Scopes, Out of scopes, Qualifying vulnerabilities, and Non-qualifying vulnerabilities. Rewards and the general description are omitted. Missing sections generate warnings; pagination is not traversed automatically. New captures replace older snapshots for the program.
 
 Validated against rendered DataDome Bot Bounty source fragments: 6 scope rows, 4 exclusions, 7 qualifying entries, and 7 non-qualifying entries. The browser popup harness was checked with this capture. All 21 automated tests pass. Installed Chrome/Firefox end-to-end verification remains pending.
