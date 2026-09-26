@@ -54,7 +54,7 @@
       return [render(rows[0]), render(Array(width).fill('---')), ...rows.slice(1).map(render)].join('\n');
     }
     if (node.tagName === 'BLOCKQUOTE') return [...node.childNodes].map(c => block(c, base)).filter(Boolean).join('\n\n').split('\n').map(l => '> ' + l).join('\n');
-    if (/^(P|SPAN|A|CODE|STRONG|EM)$/.test(node.tagName)) return inline(node, base).trim();
+    if (/^(P|SPAN|A|CODE|STRONG|EM)$/.test(node.tagName)||node.classList.contains('interactive_markdown__p')) return inline(node, base).trim();
     return [...node.childNodes].map(c => block(c, base)).filter(Boolean).join('\n\n');
   }
   function sectionsFrom(root, base, fallback, sourceGroup = null) {

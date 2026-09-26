@@ -1,4 +1,5 @@
 (() => {
+ if(location.hostname==='hackerone.com') return globalThis.ScopeBriefHackerOne.capture();
  if(location.hostname==='bugcrowd.com'||location.hostname.endsWith('.bugcrowd.com')) return globalThis.ScopeBriefBugcrowd.capture();
  const visible=e=>!!e.getClientRects().length&&getComputedStyle(e).visibility!=='hidden';
  const selected=getSelection()?.toString().trim();

@@ -1,4 +1,4 @@
-import {identity,assemble,markdown} from './core.js';
+import {identity,assemble,markdown,mergeCaptures} from './core.js';
 import {renderPreview} from './preview.js';
 const api=globalThis.browser||globalThis.chrome,$=id=>document.getElementById(id);
 let records={},current=null;
@@ -10,7 +10,7 @@ function render(selected=$('program').value){
  const r=records[$('program').value];current=r?assemble(r.program,r.captures):null;
  $('preview').value=current?markdown(current):'';$('count').textContent=`${r?.captures.length||0} halaman`;
  renderPreview($('rendered'),current?markdown(current):'Brief program akan tampil di sini.');
- const assets=r?.captures.flatMap(c=>c.adapter==='bugcrowd_v2'?c.assets:[])||[];
+ const assets=r?.captures.flatMap(c=>['bugcrowd_v2','hackerone_v3'].includes(c.adapter)?c.assets:[])||[];
  $('stats').textContent=assets.length?`${assets.filter(a=>a.scope==='in_scope').length} in · ${assets.filter(a=>a.scope==='out_of_scope').length} out`:'';
  for(const id of ['md','json','remove'])$(id).disabled=!current;
 }
@@ -21,14 +21,14 @@ $('capture').onclick=async()=>{
  try{
   const [tab]=await api.tabs.query({active:true,currentWindow:true});if(!tab?.id)throw Error('Tidak ada tab aktif.');
   show('Membaca konten yang sudah dimuat…');
-  const results=await api.scripting.executeScript({target:{tabId:tab.id},files:['bugcrowd.js','capture.js']});const capture=results[0]?.result;
+  const results=await api.scripting.executeScript({target:{tabId:tab.id},files:['bugcrowd.js','hackerone.js','capture.js']});const capture=results[0]?.result;
   if(!capture?.text_length)throw Error('Tidak ada teks terbaca. Tunggu halaman selesai dimuat.');
-  const program=identity(capture.url);capture.kind=capture.adapter==='bugcrowd_v2'?'program':capture.adapter==='hackerone_assets'?'asset_scope':$('kind').value;
+  const program=identity(capture.url);capture.kind=capture.adapter==='hackerone_v3'?capture.kind:capture.adapter==='bugcrowd_v2'?'program':capture.adapter==='hackerone_assets'?'asset_scope':$('kind').value;
   const u=new URL(capture.url);capture.key=u.origin+u.pathname+u.search+u.hash+'|'+capture.kind+'|'+(capture.pagination||'');
   const previous=records[program.id]||{program,captures:[]};
-  const record={program,captures:[...previous.captures.filter(c=>c.key!==capture.key&&(capture.adapter!=='bugcrowd_v2'||c.adapter==='bugcrowd_v2')),capture]};
+  const record={program,captures:mergeCaptures(previous.captures,capture)};
   const next={...records,[program.id]:record};await api.storage.local.set({records:next});records=next;render(program.id);
-  show(capture.adapter==='bugcrowd_v2'?`Brief tersimpan: ${capture.assets.length} target, ${capture.sections.length} bagian.${capture.warnings.length?' '+capture.warnings.join(' '):' Periksa preview sebelum ekspor.'}`:`Tersimpan: ${capture.text_length.toLocaleString()} karakter. Periksa preview sebelum ekspor.`);
+  show(['bugcrowd_v2','hackerone_v3'].includes(capture.adapter)?`Tersimpan: ${record.captures.reduce((n,c)=>n+(c.assets?.length||0),0)} aset, ${record.captures.reduce((n,c)=>n+(c.sections?.length||0),0)} bagian.${capture.warnings.length?' '+capture.warnings.join(' '):capture.adapter==='hackerone_v3'?' Ambil guidelines dan Scope untuk melengkapi brief.':' Periksa preview sebelum ekspor.'}`:`Tersimpan: ${capture.text_length.toLocaleString()} karakter. Periksa preview sebelum ekspor.`);
  }catch(e){show('Gagal: '+e.message);}finally{$('capture').disabled=false;}
 };
 function download(format){

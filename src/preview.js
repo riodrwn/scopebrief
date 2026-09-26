@@ -32,6 +32,14 @@ export function renderPreview(root, markdown) {
     const heading = line.match(/^(#{1,6}) (.*)$/);
     if (heading) { add('h' + Math.min(6, heading[1].length), heading[2]); continue; }
     if (line === '---') { root.append(document.createElement('hr')); continue; }
+    if(line.startsWith('|') && /^\|(?:\s*:?-+:?\s*\|)+\s*$/.test(lines[i]||'')) {
+      const cells=row=>row.trim().replace(/^\||\|$/g,'').split(/(?<!\\)\|/).map(s=>s.trim().replace(/\\\|/g,'|'));
+      const table=document.createElement('table'),thead=document.createElement('thead'),tbody=document.createElement('tbody');
+      const appendRow=(target,line,tag)=>{const tr=document.createElement('tr');for(const value of cells(line)){const cell=document.createElement(tag);inline(cell,value);tr.append(cell);}target.append(tr);};
+      appendRow(thead,line,'th');i++;
+      while(i<lines.length&&lines[i].startsWith('|'))appendRow(tbody,lines[i++],'td');
+      table.append(thead,tbody);root.append(table);continue;
+    }
     if (/^\s*(?:- |\d+\. )/.test(line)) {
       const list = document.createElement(/^\s*\d+\. /.test(line) ? 'ol' : 'ul');
       const first = document.createElement('li'); inline(first, line.replace(/^\s*(?:- |\d+\. )/, '')); list.append(first);

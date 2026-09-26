@@ -53,3 +53,9 @@ test('preview renders document and treats page HTML and unsafe links as text',()
  assert.equal(document.querySelector('a').getAttribute('href'),'https://example.test/');
  delete globalThis.document;
 });
+test('preview renders Markdown tables as table elements',()=>{
+ const {document}=parseHTML('<article></article>');globalThis.document=document;
+ renderPreview(document.querySelector('article'),'| Target | Notes |\n| --- | --- |\n| example.test | a\\|b |');
+ assert.equal(document.querySelectorAll('th').length,2);assert.equal(document.querySelectorAll('td').length,2);
+ assert.equal(document.querySelector('td:last-child').textContent,'a|b');delete globalThis.document;
+});

@@ -1,6 +1,16 @@
 # ScopeBrief
 
-Local Chrome and Firefox extension for readable bug bounty program briefs. Version 0.2 focuses on Bugcrowd Details pages, with Viator as the verified page structure. It exports Markdown and JSON without sending page content to an AI or backend.
+Local Chrome and Firefox extension for readable bug bounty program briefs. Version 0.3 adds structured HackerOne briefs alongside Bugcrowd, with NBA and Viator as verified source examples. It exports Markdown and JSON without sending page content to an AI or backend.
+
+## HackerOne workflow
+
+1. Open the program guidelines, wait for the policy to load, and click **Ambil program**.
+2. Open the same program’s **Scope** tab and click **Ambil program** again.
+3. Review the combined brief and download Markdown or JSON.
+
+Scope capture uses the official CSV link shown on the page, with the existing same-origin session. This includes assets outside the currently rendered table. If CSV retrieval fails, only visible rows are captured and the export explicitly warns that scope is partial. Refreshing guidelines or scope replaces that part of the previous capture, so removed targets do not survive a refresh.
+
+The brief preserves Rules of Engagement, vulnerability inclusions/exclusions, policy sections, separate in/out asset lists, per-asset instructions, and bounty eligibility. CSV coverage is recorded separately from overall completeness; linked policies are not fetched automatically.
 
 ## Bugcrowd workflow
 
@@ -49,19 +59,20 @@ To inspect the UI with synthetic data, serve the repository locally and open `/t
 
 ## Validation and limitations
 
-- Nine automated tests cover scope exclusions, unknown labels, missing known-issue counts, tag overflow, nested/malformed source lists, code/links/tables, source provenance, and safe preview rendering.
+- Sixteen automated tests cover scope exclusions, unknown labels, missing known-issue counts, tag overflow, nested/malformed source lists, code/links/tables, source provenance, and safe preview rendering.
 - The parser was checked against a DOM snapshot of the public Viator Details page: 14 in-scope and 8 out-of-scope target rows at capture time. These counts are not hardcoded.
 - Browser harness checks covered capture, preview/source switching, persistence, and a downloaded Markdown file matched the generated brief.
 - These checks do not establish full end-to-end operation as an installed extension in both Chrome and Firefox.
 - Bugcrowd DOM changes or unloaded targets produce an error or warning. Captures cover the current DOM only. Pagination is not automatically traversed, and hidden/collapsed or virtualized content may be incomplete.
 - Announcements, changelog and linked policies are not fetched. Current scope labels are authoritative for categorization; an older example document is not substituted.
 - The preview supports the primary brief format; the downloaded Markdown preserves richer constructs such as nested lists and tables.
-- HackerOne retains its previous parser. YesWeHack and Intigriti remain experimental generic extraction. This release does not claim verified multi-platform support.
+- HackerOne NBA validation compared 31 rendered table rows against the official 457-row CSV with no mismatches: 428 in-scope and 29 out-of-scope assets at capture time. Guidelines produced 15 sections. Counts are not hardcoded. Tests also cover multiline CSV instructions, CSV failure, unknown scope, and stale asset replacement.
+- YesWeHack and Intigriti remain experimental generic extraction.
 - Completeness remains `unverified`. Recheck the source before testing, especially exceptions to wildcards and restrictions within in-scope assets.
 
 ## Privacy
 
-Permissions: `activeTab`, `scripting`, `storage`. Extraction runs only on explicit capture. No cookies, tokens, analytics, remote scripts, or AI requests. Program text, including any testing credentials in it, is saved locally and included in exports; review private content before sharing. **Hapus lokal** removes the selected program's stored captures, but not downloaded files.
+Permissions: `activeTab`, `scripting`, `storage`. Extraction runs only on explicit capture. No direct cookie or token access, analytics, remote scripts, or AI requests. HackerOne capture makes a same-origin GET to the program’s official CSV using the browser session; no page content is sent to a third-party backend. Program text, including any testing credentials in it, is saved locally and included in exports; review private content before sharing. **Hapus lokal** removes the selected program's stored captures, but not downloaded files.
 
 Page content is untrusted reference data, not executable instructions. Preview uses DOM text nodes rather than source HTML. This does not guarantee downstream AI models are immune to prompt injection.
 
