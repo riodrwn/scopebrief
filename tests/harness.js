@@ -1,6 +1,3 @@
-// Browser UI fixture only. Never included in extension builds.
-globalThis.browser={
- tabs:{query:async()=>[{id:1}]},
- storage:{local:{get:async()=>({records:JSON.parse(sessionStorage.getItem('fixture-records')||'{}')}),set:async({records})=>sessionStorage.setItem('fixture-records',JSON.stringify(records))}},
- scripting:{executeScript:async()=>[{result:{url:'https://hackerone.com/fixture-program',title:'Fixture program',captured_at:new Date().toISOString(),method:'fixture',text_length:89,sections:[{heading:'Rules of Engagement',text:'Traffic must not exceed 3 requests per second.'},{heading:'Out of Scope Vulnerabilities',text:'Denial of service is excluded.'}],links:[]}}]}
-};
+// Browser-only API fixture. Not included in production extension builds.
+const captureFixture={url:'https://bugcrowd.com/engagements/sample',program_name:'Sample Program',title:'Sample Program',captured_at:'2026-09-26T00:00:00Z',adapter:'bugcrowd_v2',kind:'program',method:'fixture',text_length:95,warnings:[],links:[],sections:[{heading:'Program Guidelines',markdown:'Use only the approved test account.',text:'Use only the approved test account.'},{heading:'Disclosure',markdown:'This engagement **does not** allow public disclosure.',text:'This engagement does not allow public disclosure.'}],assets:[{name:'*.example.test',location:'*.example.test',type:'website',scope:'in_scope',group:'In-scope targets',tags:['Website Testing'],known_issues:null},{name:'*.sandbox.example.test',location:'*.sandbox.example.test',type:'website',scope:'out_of_scope',group:'Out-of-scope targets',tags:[],known_issues:null}]};
+globalThis.browser={tabs:{query:async()=>[{id:1}]},storage:{local:{get:async()=>({records:JSON.parse(sessionStorage.getItem('fixture-records')||'{}')}),set:async({records})=>sessionStorage.setItem('fixture-records',JSON.stringify(records))}},scripting:{executeScript:async()=>[{result:structuredClone(captureFixture)}]}};

@@ -9,7 +9,7 @@ with zipfile.ZipFile(root/'scopebrief-source.zip','w',zipfile.ZIP_DEFLATED) as z
     for folder in ('src','tests'):
         for p in (root/folder).rglob('*'):
             if p.is_file(): z.write(p,p.relative_to(root))
-    for name in ('package.json','build.mjs','package.py','README.md'): z.write(root/name,name)
+    for name in ('package.json','package-lock.json','build.mjs','package.py','README.md','ROADMAP.md','.gitignore'): z.write(root/name,name)
 for p in root.glob('*.zip'):
     with zipfile.ZipFile(p) as z:
         assert z.testzip() is None

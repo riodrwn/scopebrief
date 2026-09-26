@@ -1,58 +1,70 @@
-# ScopeBrief — Chrome & Firefox
+# ScopeBrief
 
-MVP extension lokal untuk mengumpulkan konteks program bug bounty ke Markdown dan JSON. Tidak memakai API AI, tidak mengirim konten ke server, tidak membaca cookie/token. Permissions: activeTab, scripting, storage.
+Local Chrome and Firefox extension for readable bug bounty program briefs. Version 0.2 focuses on Bugcrowd Details pages, with Viator as the verified page structure. It exports Markdown and JSON without sending page content to an AI or backend.
 
-## Instalasi Chrome
+## Bugcrowd workflow
 
-1. Ekstrak scopebrief-chrome.zip ke folder tetap.
-2. Buka chrome://extensions dan aktifkan Developer mode.
-3. Klik Load unpacked dan pilih folder yang berisi manifest.json.
-4. Pin ScopeBrief dari menu Extensions.
+1. Install or reload the extension, then open the program's **Details** tab.
+2. Wait for the target tables and guidelines to load.
+3. Click **Ambil program**. Bugcrowd scope and policy sections are detected automatically.
+4. Review the rendered **Preview**, or switch to **Markdown** to inspect the source.
+5. Download `.md` or `.json`.
 
-## Instalasi Firefox (pengujian lokal)
+A new Bugcrowd capture replaces the legacy generic capture for that program. Current captures of the same URL and pagination range replace their previous snapshot.
 
-1. Ekstrak scopebrief-firefox.zip.
-2. Buka about:debugging#/runtime/this-firefox.
-3. Pilih Load Temporary Add-on dan pilih manifest.json.
+## Output
 
-Firefox menghapus temporary add-on saat restart. Instalasi permanen membutuhkan paket yang ditandatangani Mozilla; paket ini belum ditandatangani atau dipublikasikan. Minimum Firefox dalam manifest: 140.
+- Program name, platform, and source URL.
+- Page structure map.
+- Target information and program-specific restrictions.
+- Separate **In-Scope Targets** and **Out-of-Scope Targets**; unknown labels stay unknown.
+- Target blocks grouped as mobile applications, websites/portals, APIs/services, wildcards, and other targets.
+- Source guidelines, access rules, booking rules where present, excluded submission types, and disclosure.
+- Export notes, capture warnings, and provenance in JSON (schema 1.1).
 
-## Contoh alur NBA
+Heading, paragraph, link, code, list, and table structure is retained. Long rule headings receive a short heading while their full original wording remains in the body. The format is inspired by the supplied Viator example; it does not copy unverified scope claims, invent known-issue counts, or generate hunting advice. Target tags, scope labels and visible notes come from the page. In-scope status and bounty eligibility are not interchangeable.
 
-1. Buka program NBA di HackerOne dan tunggu konten guidelines tampil.
-2. Buka extension, pilih Guidelines, klik Ambil halaman aktif.
-3. Buka tab Scope program yang sama, tunggu daftar aset tampil.
-4. Buka extension, pilih Daftar scope aset, lalu ambil halaman.
-5. Review preview dan ekspor Markdown atau JSON.
+## Install Chrome
 
-Untuk mengambil hanya area tertentu, seleksi teks sebelum membuka extension. Seleksi disimpan sebagai teks sumber tanpa menebak kategorinya. Guidelines diklasifikasikan berdasarkan heading yang terbaca.
+Extract `scopebrief-chrome.zip`, open `chrome://extensions`, enable Developer mode, choose **Load unpacked**, and select the folder containing `manifest.json`. For an existing unpacked installation, replace its files and click **Reload**. Re-capture the program to get the new output.
 
-## Cakupan dan batasan versi 0.1
+## Install Firefox
 
-- Identitas URL tersedia untuk HackerOne, Bugcrowd, YesWeHack dan Intigriti; situs lain memakai identitas URL generik.
-- HackerOne memiliki adapter guidelines dan tabel aset berdasarkan struktur halaman NBA yang diperiksa langsung. Tiga platform lain memakai DOM/heading generik dan belum diverifikasi langsung. Login, CAPTCHA, isi iframe, elemen virtual, pagination, tab, dan accordion tidak dioperasikan otomatis.
-- Ekspor adalah snapshot konten yang sedang dirender. Gulir, perluas bagian, dan tangkap halaman tambahan bila diperlukan. Rentang pagination dengan format seperti 1-100 of 457 ikut menjadi identitas tangkapan agar halaman berikutnya tidak menimpa halaman sebelumnya. Pagination format lain tanpa perubahan URL perlu diekspor terpisah.
-- Kategori kerentanan dipisahkan dari daftar aset. HackerOne menyertakan objek assets dengan nama kolom asli, termasuk Coverage dan Bounty yang terpisah. Tabel juga disimpan sebagai teks. Data ini bukan daftar target yang dijamin valid.
-- Link sumber dicatat tetapi halaman tujuan tidak otomatis diambil. Detail tautan tidak selalu dipertahankan pada posisi aslinya; tersedia di source links dan JSON.
-- Tidak menyimpulkan scope dari merek/domain, tidak mengubah wildcard, tidak menyamakan kelayakan bounty dengan izin pengujian.
-- Completeness selalu unverified. Kategori yang tidak ditemukan ditandai missing, bukan diasumsikan kosong.
-- Halaman guidelines dan scope NBA diperiksa langsung untuk struktur DOM. Tiga unit test memeriksa identitas program, klasifikasi, preservasi batas rate dan metadata. Harness browser memverifikasi capture/save/preview menggunakan mock API extension. Paket belum diuji sebagai extension terpasang di Chrome/Firefox; tiga platform lain belum diuji langsung.
-- Tidak ada scanning atau eksekusi instruksi halaman. Teks sumber diperlakukan sebagai reference data; export tidak menjamin model AI kebal terhadap prompt injection.
-- Hapus lokal menghapus seluruh tangkapan program terpilih. Uninstall menghapus storage extension. File unduhan tidak ikut terhapus.
+Extract `scopebrief-firefox.zip`, open `about:debugging#/runtime/this-firefox`, choose **Load Temporary Add-on**, and select `manifest.json`. Minimum Firefox: 140. Temporary installation lasts until browser restart. Permanent distribution requires Mozilla signing; these development packages are unsigned.
 
-## Pengembangan
+## Development
 
-Node.js modern diperlukan, tanpa dependency produksi.
+Node.js 22+ and Python 3 for ZIP packaging.
 
-```text
+```sh
+npm ci
 npm test
 npm run build
+python package.py
 ```
 
-Source ada di src/. build.mjs menghasilkan dist/chrome dan dist/firefox. Modifikasi identity/classify di core.js untuk penambahan format URL/kategori. Jangan klaim dukungan platform terverifikasi sebelum memeriksa halaman aktual.
+Load `dist/chrome` or `dist/firefox` after building. Runtime scripts have no external dependencies; LinkeDOM is only used for development tests. The source archive contains the lockfile.
 
-## Rujukan API browser
+To inspect the UI with synthetic data, serve the repository locally and open `/tests/harness.html`. The harness mocks extension APIs and is never included in the browser package.
 
-- https://developer.chrome.com/docs/extensions/develop/concepts/activeTab
-- https://developer.chrome.com/docs/extensions/reference/api/scripting
-- https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/manifest.json/browser_specific_settings
+## Validation and limitations
+
+- Nine automated tests cover scope exclusions, unknown labels, missing known-issue counts, tag overflow, nested/malformed source lists, code/links/tables, source provenance, and safe preview rendering.
+- The parser was checked against a DOM snapshot of the public Viator Details page: 14 in-scope and 8 out-of-scope target rows at capture time. These counts are not hardcoded.
+- Browser harness checks covered capture, preview/source switching, persistence, and a downloaded Markdown file matched the generated brief.
+- These checks do not establish full end-to-end operation as an installed extension in both Chrome and Firefox.
+- Bugcrowd DOM changes or unloaded targets produce an error or warning. Captures cover the current DOM only. Pagination is not automatically traversed, and hidden/collapsed or virtualized content may be incomplete.
+- Announcements, changelog and linked policies are not fetched. Current scope labels are authoritative for categorization; an older example document is not substituted.
+- The preview supports the primary brief format; the downloaded Markdown preserves richer constructs such as nested lists and tables.
+- HackerOne retains its previous parser. YesWeHack and Intigriti remain experimental generic extraction. This release does not claim verified multi-platform support.
+- Completeness remains `unverified`. Recheck the source before testing, especially exceptions to wildcards and restrictions within in-scope assets.
+
+## Privacy
+
+Permissions: `activeTab`, `scripting`, `storage`. Extraction runs only on explicit capture. No cookies, tokens, analytics, remote scripts, or AI requests. Program text, including any testing credentials in it, is saved locally and included in exports; review private content before sharing. **Hapus lokal** removes the selected program's stored captures, but not downloaded files.
+
+Page content is untrusted reference data, not executable instructions. Preview uses DOM text nodes rather than source HTML. This does not guarantee downstream AI models are immune to prompt injection.
+
+## R&D
+
+Development lives in the personal `riodrwn/scopebrief` repository. See `ROADMAP.md` for work before a future NusaSec transfer. No transfer or store publication has been performed.

@@ -1,4 +1,5 @@
 (() => {
+ if(location.hostname==='bugcrowd.com'||location.hostname.endsWith('.bugcrowd.com')) return globalThis.ScopeBriefBugcrowd.capture();
  const visible=e=>!!e.getClientRects().length&&getComputedStyle(e).visibility!=='hidden';
  const selected=getSelection()?.toString().trim();
  let root=['main','[role="main"]','article'].map(s=>document.querySelector(s)).find(e=>e&&visible(e))||document.body;

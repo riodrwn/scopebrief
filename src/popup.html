@@ -1,13 +1,16 @@
-<!doctype html><html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="stylesheet" href="popup.css"><title>ScopeBrief</title></head><body>
-<header><span class="logo">SB</span><div><h1>ScopeBrief</h1><p>Bug bounty context, ready for AI.</p></div><span class="badge">LOCAL</span></header>
-<main><label for="program">Program tersimpan</label><select id="program"><option value="">Belum ada tangkapan</option></select>
-<div class="card"><h2>Ambil konteks program</h2><p>Buka guidelines atau scope. Tunggu isinya muncul, lalu ambil halaman. Pilih teks di halaman untuk mengambil bagian tertentu saja.</p>
-<label for="kind">Isi halaman ini</label><select id="kind"><option value="guidelines">Guidelines / rules / vulnerability categories</option><option value="asset_scope">Daftar scope aset</option></select>
-<button id="capture" class="primary">＋ Ambil halaman aktif</button></div>
-<p id="status" role="status" aria-live="polite">Tidak mengirim data ke server atau AI.</p>
-<div class="row"><h2>Preview ekspor</h2><span id="count">0 halaman</span></div>
-<p class="notice">Periksa pagination dan bagian yang dilipat. Kelengkapan perlu diverifikasi. Tangkapan ulang URL dan jenis yang sama mengganti versi sebelumnya.</p>
-<textarea id="preview" readonly spellcheck="false" aria-label="Preview Markdown" placeholder="Hasil ekstraksi akan tampil di sini…"></textarea>
-<div class="actions"><button id="md" disabled>↓ Markdown</button><button id="json" disabled>↓ JSON</button><button id="remove" class="danger" disabled>Hapus lokal</button></div>
-<details><summary>Privasi & cara kerja</summary><p>Hanya membaca halaman saat tombol diklik. Data disimpan di storage lokal extension, tanpa cookies, token, analytics, atau koneksi AI. Periksa konten privat sebelum dibagikan. Parser menggunakan struktur heading; situs generik juga dapat ditangkap.</p></details>
+<!doctype html>
+<html lang="id">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="stylesheet" href="popup.css"><title>ScopeBrief</title></head>
+<body>
+<header><span class="logo">SB</span><div><h1>ScopeBrief <small>0.2</small></h1><p>Bug bounty context, ready for AI.</p></div><span class="badge">LOCAL</span></header>
+<main>
+<div class="capture-bar"><div><strong>Bugcrowd Brief</strong><p>Buka tab Details program, lalu ambil guidelines dan target.</p></div><button id="capture" class="primary">Ambil program</button></div>
+<p id="status" role="status" aria-live="polite">Konten diproses dan disimpan di perangkat ini.</p>
+<div class="toolbar"><label for="program" class="sr-only">Program tersimpan</label><select id="program"><option value="">Belum ada program</option></select><span id="count">0 halaman</span></div>
+<details class="options"><summary>Platform lain (eksperimental)</summary><label for="kind">Isi halaman ini</label><select id="kind"><option value="guidelines">Guidelines / rules</option><option value="asset_scope">Scope aset</option></select><p>Bugcrowd dideteksi otomatis. Platform lain masih memakai parser lama.</p></details>
+<div class="view-tabs" role="group" aria-label="Tampilan hasil"><button id="read" aria-pressed="true">Preview</button><button id="raw" aria-pressed="false">Markdown</button><span id="stats"></span></div>
+<article id="rendered" class="preview" aria-label="Preview dokumen"><p class="empty">Brief program akan tampil di sini.</p></article>
+<textarea id="preview" class="preview" hidden readonly spellcheck="false" aria-label="Source Markdown"></textarea>
+<div class="actions"><button id="md" disabled>Unduh .md</button><button id="json" disabled>Unduh .json</button><button id="remove" class="danger" disabled>Hapus lokal</button></div>
+<p class="footnote">Periksa scope terbaru sebelum testing. Bagian tersembunyi, pagination, dan linked policies belum tentu tercakup.</p>
 </main><script type="module" src="popup.js"></script></body></html>
