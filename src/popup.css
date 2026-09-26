@@ -2,3 +2,40 @@
 .preview table{width:100%;border-collapse:collapse;font-size:11px;margin:12px 0}.preview th,.preview td{border:1px solid #d8e0e9;padding:7px;text-align:left}.preview th{background:#e8eef5}
 
 .credit{text-align:center;font-size:11px;color:#a5b4cc;margin:10px 0 2px}.credit a{color:#5B8CFF;text-decoration:none}.credit a:hover,.credit a:focus-visible{text-decoration:underline}
+
+/* Fit the browser popup; reserve scrolling for the document. */
+html{width:570px;max-width:100vw;height:600px;max-height:100vh;overflow:hidden}
+body{width:100%;height:100%;max-height:none;overflow:hidden;display:flex;flex-direction:column}
+header{flex:none;padding:12px 16px;min-width:0}
+header>div{min-width:0}
+main{flex:1;min-height:0;padding:12px 16px;display:flex;flex-direction:column;gap:8px;overflow:hidden}
+.capture-bar{flex:none;gap:10px}
+.capture-bar>div{min-width:0;flex:1}
+.capture-bar p{line-height:1.4}
+.toolbar,.view-tabs,.actions{flex:none;min-width:0}
+#status{flex:none;margin:0;min-height:0;max-height:42px;overflow:auto;overflow-wrap:anywhere}
+.view-tabs{margin:0;flex-wrap:wrap}
+.preview{flex:1;min-height:60px;height:auto;margin:0;overscroll-behavior:contain;scrollbar-width:thin}
+textarea.preview{resize:none}
+.actions{margin:0;flex-wrap:wrap}
+.footnote{flex:none;margin:0;line-height:1.4}
+.credit{flex:none;margin:0}
+button{max-width:100%}
+@media(max-width:440px){
+ header{padding:10px 12px;gap:8px}
+ main{padding:10px 12px;gap:7px}
+ .capture-bar{align-items:flex-start}
+ .capture-bar p{font-size:10px}
+ button{padding:7px 9px}
+ .actions button{flex:1;padding:7px 6px;font-size:11px;white-space:nowrap}
+ .danger{margin-left:0}
+ .preview{padding:12px}
+ #stats{font-size:10px}
+}
+@media(max-height:500px){
+ header{padding-top:8px;padding-bottom:8px}
+ main{padding-top:8px;padding-bottom:8px;gap:6px}
+ .capture-bar p{display:none}
+ .preview{min-height:40px;padding:10px}
+ .footnote{font-size:9px}
+}
