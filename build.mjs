@@ -2,7 +2,7 @@ import {mkdir,copyFile,writeFile} from 'node:fs/promises';
 import {fileURLToPath} from 'node:url';
 process.chdir(fileURLToPath(new URL('.',import.meta.url)));
 const icons=Object.fromEntries([16,32,48,128].map(size=>[size,`icon-${size}.png`]));
-const base={manifest_version:3,icons,name:'ScopeBrief',version:'0.6.1',description:'Readable HackerOne, Bugcrowd, YesWeHack and Intigriti scope briefs.',permissions:['activeTab','scripting','storage'],action:{default_icon:icons,default_popup:'popup.html',default_title:'ScopeBrief'}};
+const base={manifest_version:3,icons,name:'ScopeBrief',version:'0.6.2',description:'Readable HackerOne, Bugcrowd, YesWeHack and Intigriti scope briefs.',permissions:['activeTab','scripting','storage'],action:{default_icon:icons,default_popup:'popup.html',default_title:'ScopeBrief'}};
 for(const browser of ['chrome','firefox']){
  await mkdir(`dist/${browser}`,{recursive:true});
  const manifest=structuredClone(base);
