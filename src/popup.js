@@ -10,7 +10,7 @@ function render(selected=$('program').value){
  const r=records[$('program').value];current=r?assemble(r.program,r.captures):null;
  $('preview').value=current?markdown(current):'';$('count').textContent=`${r?.captures.length||0} captures`;
  renderPreview($('rendered'),current?markdown(current):'Your program brief will appear here.');
- const assets=r?.captures.flatMap(c=>['bugcrowd_v2','hackerone_v3'].includes(c.adapter)?c.assets:[])||[];
+ const assets=r?.captures.flatMap(c=>['bugcrowd_v2','hackerone_v3','yeswehack_v1'].includes(c.adapter)?c.assets:[])||[];
  $('stats').textContent=assets.length?`${assets.filter(a=>a.scope==='in_scope').length} in · ${assets.filter(a=>a.scope==='out_of_scope').length} out`:'';
  for(const id of ['md','json','remove'])$(id).disabled=!current;
 }
@@ -21,14 +21,14 @@ $('capture').onclick=async()=>{
  try{
   const [tab]=await api.tabs.query({active:true,currentWindow:true});if(!tab?.id)throw Error('No active tab.');
   show('Fetching program guidelines and scope…');
-  const results=await api.scripting.executeScript({target:{tabId:tab.id},files:['bugcrowd.js','hackerone.js','capture.js']});const capture=results[0]?.result;
+  const results=await api.scripting.executeScript({target:{tabId:tab.id},files:['bugcrowd.js','hackerone.js','yeswehack.js','capture.js']});const capture=results[0]?.result;
   if(!capture?.text_length)throw Error('No readable content. Wait for the page to finish loading.');
-  const program=identity(capture.url);capture.kind=capture.adapter==='hackerone_v3'?capture.kind:capture.adapter==='bugcrowd_v2'?'program':capture.adapter==='hackerone_assets'?'asset_scope':$('kind').value;
+  const program=identity(capture.url);capture.kind=capture.adapter==='hackerone_v3'?capture.kind:['bugcrowd_v2','yeswehack_v1'].includes(capture.adapter)?'program':capture.adapter==='hackerone_assets'?'asset_scope':$('kind').value;
   const u=new URL(capture.url);capture.key=u.origin+u.pathname+u.search+u.hash+'|'+capture.kind+'|'+(capture.pagination||'');
   const previous=records[program.id]||{program,captures:[]};
   const record={program,captures:mergeCaptures(previous.captures,capture)};
   const next={...records,[program.id]:record};await api.storage.local.set({records:next});records=next;render(program.id);
-  show(['bugcrowd_v2','hackerone_v3'].includes(capture.adapter)?`Saved: ${record.captures.reduce((n,c)=>n+(c.assets?.length||0),0)} assets, ${record.captures.reduce((n,c)=>n+(c.sections?.length||0),0)} sections.${record.captures.some(c=>c.warnings?.length)?' '+record.captures.flatMap(c=>c.warnings||[]).join(' '):' Review the preview before exporting.'}`:`Saved: ${capture.text_length.toLocaleString()} characters. Review the preview before exporting.`);
+  show(['bugcrowd_v2','hackerone_v3','yeswehack_v1'].includes(capture.adapter)?`Saved: ${record.captures.reduce((n,c)=>n+(c.assets?.length||0),0)} assets, ${record.captures.reduce((n,c)=>n+(c.sections?.length||0),0)} sections.${record.captures.some(c=>c.warnings?.length)?' '+record.captures.flatMap(c=>c.warnings||[]).join(' '):' Review the preview before exporting.'}`:`Saved: ${capture.text_length.toLocaleString()} characters. Review the preview before exporting.`);
  }catch(e){show('Failed: '+e.message);}finally{$('capture').disabled=false;}
 };
 function download(format){
