@@ -1,4 +1,4 @@
-/* HackerOne adapter: explicit capture only; CSV URL must come from this program's page. */
+/* HackerOne adapter: explicit capture only; CSV requests stay on the current program. */
 (() => {
   const text = value => String(value ?? '').replace(/\u00a0/g, ' ').trim();
   function parseCSV(source) {
@@ -26,6 +26,15 @@
     });
   }
   const bool = value => text(value).toLowerCase() === 'true' ? true : text(value).toLowerCase() === 'false' ? false : null;
+  async function fetchAssets(csvURL, request) {
+    const response = await request(csvURL,{credentials:'same-origin',redirect:'error',signal:AbortSignal.timeout(15000)});
+    if (!response.ok) throw Error(`CSV HTTP ${response.status}.`);
+    const source = await response.text();
+    if (source.length > 10_000_000) throw Error('CSV melebihi batas ukuran.');
+    const assets = csvAssets(source);
+    if (!assets.length) throw Error('CSV tidak berisi aset.');
+    return assets;
+  }
   function csvAssets(source) {
     return parseCSV(source).map(r => ({
       name: r.identifier, location: r.identifier, type: r.asset_type,
@@ -69,6 +78,16 @@
       }
       base.links = [...policy.querySelectorAll('a[href]')].flatMap(a => {try {const link = new URL(a.getAttribute('href'),url);return /^https?:$/.test(link.protocol)?[{label:text(a.textContent),url:link.href}]:[];}catch{return [];}});
       base.text_length = base.sections.reduce((n,s) => n+s.text.length,0);
+      const csvURL = `${u.origin}/teams/${encodeURIComponent(handle)}/assets/download_csv.csv`;
+      const scope = {...base,kind:'asset_scope',url:`${u.origin}/${handle}/policy_scopes`,sections:[],links:[],warnings:[],assets:[],method:'official_csv',csv_source:csvURL,scope_coverage:{mode:'unavailable',expected_count:null,captured_count:0}};
+      try {
+        scope.assets = await fetchAssets(csvURL,request);
+        scope.scope_coverage = {mode:'csv_snapshot',expected_count:null,captured_count:scope.assets.length};
+      } catch(error) {
+        scope.warnings.push(`Scope otomatis gagal (${error.message}). Coba Ambil program lagi atau buka Scope untuk mengambil baris yang terlihat.`);
+      }
+      scope.text_length = JSON.stringify(scope.assets).length;
+      base.related_captures = [scope];
       return base;
     }
     base.kind = 'asset_scope';
@@ -83,12 +102,7 @@
       if (!link) throw Error('Link CSV resmi tidak ditemukan.');
       const csvURL = new URL(link.getAttribute('href'), url);
       if (csvURL.origin !== u.origin || csvURL.pathname !== `/teams/${handle}/assets/download_csv.csv` || csvURL.search) throw Error('Link CSV tidak cocok dengan program ini.');
-      const response = await request(csvURL.href,{credentials:'same-origin',redirect:'error',signal:AbortSignal.timeout(15000)});
-      if (!response.ok) throw Error(`CSV HTTP ${response.status}.`);
-      const source = await response.text();
-      if (source.length > 10_000_000) throw Error('CSV melebihi batas ukuran.');
-      base.assets = csvAssets(source);
-      if (!base.assets.length) throw Error('CSV tidak berisi aset.');
+      base.assets = await fetchAssets(csvURL.href,request);
       base.method = 'official_csv'; base.csv_source = csvURL.href;
       base.scope_coverage.mode = 'csv_snapshot';
       if (expected !== null && base.assets.length !== expected) base.warnings.push('Jumlah CSV berbeda dari total tabel. Periksa filter dan pembaruan scope.');

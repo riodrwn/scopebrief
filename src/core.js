@@ -34,6 +34,10 @@ export function markdown(data){
  return `# ${data.program.key.replace(/[\r\n]/g,' ')}\n\nPlatform: ${data.program.platform}\nExported: ${data.exported_at}\nCompleteness: ${data.completeness.status}\nMissing categories: ${data.completeness.missing_categories.join(', ')||'None detected; review still required'}\n\n${data.content_trust}\n\n${data.completeness.note}\n\n`+data.sections.map(s=>`## ${s.heading}\n\nCategory: ${s.category}\nSource: ${s.source_url}\nCaptured: ${s.captured_at}\n\n${s.text}\n`).join('\n')+'\n## Source links\n\n'+[...new Set(data.captures.flatMap(c=>c.links.map(l=>l.url)))].join('\n');
 }
 export function mergeCaptures(previous,capture){
+ if(capture.adapter==='hackerone_v3'&&capture.related_captures){
+  const {related_captures,...primary}=capture;
+  return related_captures.reduce((result,related)=>mergeCaptures(result,related),mergeCaptures(previous,primary));
+ }
  if(capture.adapter==='hackerone_v3') return [...previous.filter(c=>c.adapter==='hackerone_v3'&&c.kind!==capture.kind),capture];
  return [...previous.filter(c=>c.key!==capture.key&&(capture.adapter!=='bugcrowd_v2'||c.adapter==='bugcrowd_v2')),capture];
 }

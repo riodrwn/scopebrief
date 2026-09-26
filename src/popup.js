@@ -20,7 +20,7 @@ $('capture').onclick=async()=>{
  $('capture').disabled=true;
  try{
   const [tab]=await api.tabs.query({active:true,currentWindow:true});if(!tab?.id)throw Error('Tidak ada tab aktif.');
-  show('Membaca konten yang sudah dimuat…');
+  show('Mengambil guidelines dan scope program…');
   const results=await api.scripting.executeScript({target:{tabId:tab.id},files:['bugcrowd.js','hackerone.js','capture.js']});const capture=results[0]?.result;
   if(!capture?.text_length)throw Error('Tidak ada teks terbaca. Tunggu halaman selesai dimuat.');
   const program=identity(capture.url);capture.kind=capture.adapter==='hackerone_v3'?capture.kind:capture.adapter==='bugcrowd_v2'?'program':capture.adapter==='hackerone_assets'?'asset_scope':$('kind').value;
@@ -28,7 +28,7 @@ $('capture').onclick=async()=>{
   const previous=records[program.id]||{program,captures:[]};
   const record={program,captures:mergeCaptures(previous.captures,capture)};
   const next={...records,[program.id]:record};await api.storage.local.set({records:next});records=next;render(program.id);
-  show(['bugcrowd_v2','hackerone_v3'].includes(capture.adapter)?`Tersimpan: ${record.captures.reduce((n,c)=>n+(c.assets?.length||0),0)} aset, ${record.captures.reduce((n,c)=>n+(c.sections?.length||0),0)} bagian.${capture.warnings.length?' '+capture.warnings.join(' '):capture.adapter==='hackerone_v3'?' Ambil guidelines dan Scope untuk melengkapi brief.':' Periksa preview sebelum ekspor.'}`:`Tersimpan: ${capture.text_length.toLocaleString()} karakter. Periksa preview sebelum ekspor.`);
+  show(['bugcrowd_v2','hackerone_v3'].includes(capture.adapter)?`Tersimpan: ${record.captures.reduce((n,c)=>n+(c.assets?.length||0),0)} aset, ${record.captures.reduce((n,c)=>n+(c.sections?.length||0),0)} bagian.${record.captures.some(c=>c.warnings?.length)?' '+record.captures.flatMap(c=>c.warnings||[]).join(' '):' Periksa preview sebelum ekspor.'}`:`Tersimpan: ${capture.text_length.toLocaleString()} karakter. Periksa preview sebelum ekspor.`);
  }catch(e){show('Gagal: '+e.message);}finally{$('capture').disabled=false;}
 };
 function download(format){

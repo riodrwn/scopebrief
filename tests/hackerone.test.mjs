@@ -53,3 +53,24 @@ test('unloaded page fails and unknown booleans never grant scope',async()=>{
  await assert.rejects(capture(parseHTML('<main>Loading</main>').document,base),/belum dimuat/);
  assert.equal(csvAssets(csv.replace('false,true','false,unknown'))[0].scope,'unknown');
 });
+test('one guidelines capture fetches scope automatically and exports both',async()=>{
+ let requested;
+ const policy=await capture(policyDoc(),base,async(url,options)=>{requested=url;assert.equal(options.credentials,'same-origin');return response();});
+ assert.equal(requested,'https://hackerone.com/teams/example/assets/download_csv.csv');
+ const records=mergeCaptures([],policy);
+ assert.equal(records.length,2);
+ const data=assemble(identity(base),records);
+ assert.equal(data.assets.length,2);
+ assert.match(markdown(data),/3 requests per second/);
+ assert.doesNotMatch(markdown(data),/Scope aset belum diambil/);
+});
+test('automatic CSV failure preserves policy but removes stale scope with warning',async()=>{
+ const old=await capture(scopeDoc(),base+'/policy_scopes',response);
+ const policy=await capture(policyDoc(),base,async()=>({ok:false,status:403}));
+ const records=mergeCaptures([old],policy);
+ const data=assemble(identity(base),records);
+ assert.equal(data.assets.length,0);
+ assert.ok(data.sections.length);
+ assert.match(markdown(data),/Scope otomatis gagal/);
+ assert.equal(records[1].scope_coverage.mode,'unavailable');
+});

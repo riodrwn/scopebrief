@@ -1,14 +1,14 @@
 # ScopeBrief
 
-Local Chrome and Firefox extension for readable bug bounty program briefs. Version 0.3 adds structured HackerOne briefs alongside Bugcrowd, with NBA and Viator as verified source examples. It exports Markdown and JSON without sending page content to an AI or backend.
+Local Chrome and Firefox extension for readable bug bounty program briefs. Version 0.3.1 adds structured HackerOne briefs alongside Bugcrowd, with NBA and Viator as verified source examples. It exports Markdown and JSON without sending page content to an AI or backend.
 
 ## HackerOne workflow
 
 1. Open the program guidelines, wait for the policy to load, and click **Ambil program**.
-2. Open the same program’s **Scope** tab and click **Ambil program** again.
+2. Scope is fetched automatically from the official program CSV; no Scope tab visit is required.
 3. Review the combined brief and download Markdown or JSON.
 
-Scope capture uses the official CSV link shown on the page, with the existing same-origin session. This includes assets outside the currently rendered table. If CSV retrieval fails, only visible rows are captured and the export explicitly warns that scope is partial. Refreshing guidelines or scope replaces that part of the previous capture, so removed targets do not survive a refresh.
+Guidelines capture requests the official program CSV endpoint using the existing same-origin session. Capture from the Scope tab remains supported. This includes assets outside the currently rendered table. If CSV retrieval fails, only visible rows are captured and the export explicitly warns that scope is partial. Refreshing guidelines or scope replaces that part of the previous capture, so removed targets do not survive a refresh.
 
 The brief preserves Rules of Engagement, vulnerability inclusions/exclusions, policy sections, separate in/out asset lists, per-asset instructions, and bounty eligibility. CSV coverage is recorded separately from overall completeness; linked policies are not fetched automatically.
 
@@ -59,7 +59,7 @@ To inspect the UI with synthetic data, serve the repository locally and open `/t
 
 ## Validation and limitations
 
-- Sixteen automated tests cover scope exclusions, unknown labels, missing known-issue counts, tag overflow, nested/malformed source lists, code/links/tables, source provenance, and safe preview rendering.
+- Eighteen automated tests cover scope exclusions, unknown labels, missing known-issue counts, tag overflow, nested/malformed source lists, code/links/tables, source provenance, and safe preview rendering.
 - The parser was checked against a DOM snapshot of the public Viator Details page: 14 in-scope and 8 out-of-scope target rows at capture time. These counts are not hardcoded.
 - Browser harness checks covered capture, preview/source switching, persistence, and a downloaded Markdown file matched the generated brief.
 - These checks do not establish full end-to-end operation as an installed extension in both Chrome and Firefox.
