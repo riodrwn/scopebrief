@@ -91,3 +91,9 @@ Validated against rendered DataDome Bot Bounty source fragments: 6 scope rows, 4
 
 
 Version 0.4.3 provides Markdown and JSON file downloads, with Preview, Markdown, and JSON tabs. No clipboard permission is required.
+
+## Intigriti workflow
+
+Version 0.5.0 adds Intigriti Detail pages. Capture includes Rules of engagement, Assets, In scope, and Out of scope. Asset badges determine scope status: explicit Out of scope overrides bounty tiers, No bounty remains in scope, and unknown badges stay unknown. Clear filters and click Expand all before capture to include loaded asset descriptions; collapsed descriptions and active filters produce warnings. Pagination is not traversed automatically.
+
+Validated against Nexuzhealth rendered page fragments: 15 assets (8 in scope, 7 out of scope), 13 expanded asset descriptions, and all 3 requested policy sections. ROE rate limit and request header were preserved. Popup and JSON checks passed in the browser harness; all 24 automated tests pass. Installed-extension checks in Chrome and Firefox remain pending.
