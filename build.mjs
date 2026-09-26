@@ -1,7 +1,7 @@
 import {mkdir,copyFile,writeFile} from 'node:fs/promises';
 import {fileURLToPath} from 'node:url';
 process.chdir(fileURLToPath(new URL('.',import.meta.url)));
-const base={manifest_version:3,name:'ScopeBrief',version:'0.5.0',description:'Readable HackerOne, Bugcrowd, YesWeHack and Intigriti scope briefs.',permissions:['activeTab','scripting','storage'],action:{default_popup:'popup.html',default_title:'ScopeBrief'}};
+const base={manifest_version:3,name:'ScopeBrief',version:'0.5.1',description:'Readable HackerOne, Bugcrowd, YesWeHack and Intigriti scope briefs.',permissions:['activeTab','scripting','storage'],action:{default_popup:'popup.html',default_title:'ScopeBrief'}};
 for(const browser of ['chrome','firefox']){
  await mkdir(`dist/${browser}`,{recursive:true});
  const manifest=structuredClone(base);
