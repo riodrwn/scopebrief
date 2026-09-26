@@ -1,6 +1,6 @@
 # ScopeBrief
 
-Local Chrome and Firefox extension for readable bug bounty program briefs. Version 0.3.1 adds structured HackerOne briefs alongside Bugcrowd, with NBA and Viator as verified source examples. It exports Markdown and JSON without sending page content to an AI or backend.
+Local Chrome and Firefox extension for readable bug bounty program briefs. Version 0.3.2 adds structured HackerOne briefs alongside Bugcrowd, with NBA and Viator as verified source examples. It exports Markdown and JSON without sending page content to an AI or backend.
 
 ## HackerOne workflow
 
@@ -79,3 +79,4 @@ Page content is untrusted reference data, not executable instructions. Preview u
 ## R&D
 
 Development lives in the personal `riodrwn/scopebrief` repository. See `ROADMAP.md` for work before a future NusaSec transfer. No transfer or store publication has been performed.
+HackerOne exports omit the page structure map, introductory Purpose and Scope, submission guidance, rewards and severity reward subsections, response targets, disclosure, compliance, and references. This filter applies to Markdown, preview, and JSON, including previously stored captures. Asset scope and per-asset instructions remain included.

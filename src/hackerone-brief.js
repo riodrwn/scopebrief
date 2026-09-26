@@ -9,7 +9,7 @@ export function hackeroneMarkdown(data) {
   const source=`https://hackerone.com/${data.program.key}`;
   const sections=policy?.sections || [];
   const inCount=assets.filter(a=>a.scope==='in_scope').length,outCount=assets.filter(a=>a.scope==='out_of_scope').length;
-  const parts=[`# ${escape(name)} — Bug Bounty Brief`,`**Platform:** HackerOne  \n**Program:** ${escape(data.program.key)}  \n**Source:** ${source}`,'---','## Page Structure Map',code([name,...sections.map(s=>'├── '+s.heading),'├── In-Scope Assets','├── Out-of-Scope Assets','└── Export Notes'].join('\n'))];
+  const parts=[`# ${escape(name)} — Bug Bounty Brief`,`**Platform:** HackerOne  \n**Program:** ${escape(data.program.key)}  \n**Source:** ${source}`];
   if (!policy) parts.push('> Program guidelines belum diambil. Buka tab Program guidelines dan ambil ulang sebelum menggunakan brief ini.');
   for (const s of sections) parts.push('---',`## ${escape(s.heading)}`,s.markdown ?? s.text);
   if (!scopeCaptures.length) parts.push('> Scope aset belum diambil. Buka tab Scope dan klik Ambil program.');
