@@ -1,6 +1,6 @@
 # ScopeBrief
 
-Local Chrome and Firefox extension for readable bug bounty program briefs. Version 0.4.3 adds structured HackerOne briefs alongside Bugcrowd, with NBA and Viator as verified source examples. It exports Markdown and JSON without sending page content to an AI or backend.
+ScopeBrief 1.0.0 is a local Chrome and Firefox extension for readable bug bounty scope briefs from HackerOne, Bugcrowd, YesWeHack, and Intigriti. It exports Markdown and JSON without sending page content to an AI or backend.
 
 ## HackerOne workflow
 
