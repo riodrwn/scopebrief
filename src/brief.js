@@ -24,10 +24,6 @@ export function bugcrowdMarkdown(data) {
   const rules = sections.filter(s => !s.source_group);
   const warnings = [...new Set(captures.flatMap(c => c.warnings || []))];
   const chunks = [`# ${escape(name)} — Bug Bounty Brief`, `**Platform:** Bugcrowd  \n**Program:** ${escape(name)}  \n**Source:** ${latest?.url || ''}`, '---'];
-  const map = ['Target Information', 'In-Scope Targets', 'Out-of-Scope Targets', ...rules.map(s => s.heading)];
-  if (assets.some(a => a.scope === 'unknown')) map.splice(3, 0, 'Targets with Unverified Scope');
-  const uniqueMap = [...new Set(map)];
-  chunks.push('## Page Structure Map', code([name, ...uniqueMap.map((s, i) => `${i === uniqueMap.length - 1 ? '└──' : '├──'} ${s}`)].join('\n')));
   chunks.push('---', '## Target Information');
   for (const note of notes) {
     if (notes.length > 1) chunks.push(`### ${escape(note.source_group)} — ${escape(note.heading)}`);

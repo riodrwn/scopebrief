@@ -22,6 +22,7 @@ export function identity(url){
  return {platform,key,id:platform+':'+key};
 }
 export function assemble(program,captures){
+ captures=captures.map(c=>c.adapter==='bugcrowd_v2'?{...c,sections:c.sections.filter(s=>! /^(page structure map|program overview|eligibility|ratings\s*\/\s*rewards|safe harbor|testing problems|engagement rules|disclosure)$/i.test(s.heading.trim()))}:c);
  // Apply export preferences to stored captures too, so older captures need no refresh.
  captures=captures.map(c=>c.adapter==='hackerone_v3'?{...c,sections:c.sections.filter(s=>! /^(page structure map|purpose|scope|make your submission count|reward structure|(?:low|medium|high|critical) severity vulnerabilit(?:y|ies)|response targets|disclosure policy|compliance|references)$/i.test(s.heading.trim()))}:c);
  const sections=captures.flatMap(c=>c.sections.map(s=>({...s,category:c.kind==='asset_scope'?'asset_scope':classify(s.heading),source_url:c.url,captured_at:c.captured_at})));

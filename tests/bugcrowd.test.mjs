@@ -27,11 +27,13 @@ test('scope unknown is never guessed from group name',()=>{
  const doc=fixture();doc.querySelector('.cc-scope-pill').textContent='Unrecognized';
  const result=capture(doc,url);assert.equal(result.assets[0].scope,'unknown');assert.match(result.warnings.join(),/could not be verified/);
 });
-test('instructions outside li, heading-only warnings, links, and nondisclosure survive',()=>{
+test('instructions and links survive while Disclosure is omitted',()=>{
  const result=capture(fixture(),url), text=markdown(assemble(identity(url),[result]));
- for(const phrase of ['TESTPRODUCT1','3 months','2 months','KYC','Credit card caution','**does not**','https://bugcrowd.com/help']) assert.ok(text.includes(phrase),phrase);
+ for(const phrase of ['TESTPRODUCT1','3 months','2 months','KYC','Credit card caution','https://bugcrowd.com/help']) assert.ok(text.includes(phrase),phrase);
  assert.ok(!text.includes('Old announcement should not become policy'));
  assert.ok(!text.includes('Category:'));
+ assert.ok(!text.includes('## Disclosure'));
+ assert.ok(!text.includes('## Page Structure Map'));
  assert.ok(text.indexOf('*.sandbox.example.test')>text.indexOf('## Out-of-Scope Targets'));
  assert.match(text,/# Sample — Bug Bounty Brief/);
 });
