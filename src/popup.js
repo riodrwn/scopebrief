@@ -39,18 +39,16 @@ $('capture').onclick=async()=>{
   show(['bugcrowd_v2','hackerone_v3','yeswehack_v1'].includes(capture.adapter)?`Saved: ${record.captures.reduce((n,c)=>n+(c.assets?.length||0),0)} assets, ${record.captures.reduce((n,c)=>n+(c.sections?.length||0),0)} sections.${record.captures.some(c=>c.warnings?.length)?' '+record.captures.flatMap(c=>c.warnings||[]).join(' '):' Review the preview before exporting.'}`:`Saved: ${capture.text_length.toLocaleString()} characters. Review the preview before exporting.`);
  }catch(e){show('Failed: '+e.message);}finally{$('capture').disabled=false;}
 };
-async function copy(format){
+function download(format){
  if(!current)return;
  const text=format==='json'?JSON.stringify(current,null,2):markdown(current);
- try{
-  await navigator.clipboard.writeText(text);
-  show((format==='json'?'JSON':'Markdown')+' copied to clipboard.');
- }catch{
-  setView(format==='json'?'jsonView':'raw');
-  $('preview').focus();$('preview').select();
-  show('Clipboard access failed. The text is selected; press Ctrl+C to copy.');
- }
+ const url=URL.createObjectURL(new Blob([text],{type:format==='json'?'application/json':'text/markdown;charset=utf-8'}));
+ const a=document.createElement('a');a.href=url;
+ a.download=current.program.key.replace(/[^a-z0-9_-]/gi,'-')+'.'+format;
+ document.body.append(a);a.click();a.remove();
+ setTimeout(()=>URL.revokeObjectURL(url),10000);
+ show((format==='json'?'JSON':'Markdown')+' download started.');
 }
-$('md').onclick=()=>copy('md');$('json').onclick=()=>copy('json');
+$('md').onclick=()=>download('md');$('json').onclick=()=>download('json');
 $('remove').onclick=async()=>{try{const next={...records};delete next[$('program').value];await api.storage.local.set({records:next});records=next;render();show('Program data removed from local storage.');}catch(e){show(e.message);}};
 try{records=(await api.storage.local.get('records')).records||{};render();}catch(e){show('Storage unavailable: '+e.message);}
