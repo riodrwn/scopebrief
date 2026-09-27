@@ -1,14 +1,7 @@
-# ScopeBrief R&D
+# Roadmap
 
-Repository pribadi untuk pengembangan sebelum siap dipindahkan ke NusaSec.
-
-## Sebelum rilis
-
-- [ ] Verifikasi extension terpasang di Chrome dan Firefox.
-- [ ] Adapter khusus dan fixture untuk Bugcrowd, YesWeHack, dan Intigriti.
-- [ ] Uji pagination, scope exclusions, dan catatan per aset.
-- [ ] Rapikan format Markdown serta schema JSON dan provenance.
-- [ ] Uji ekspor program publik dan program privat dengan akses yang sah.
-- [ ] Tinjau izin extension, penanganan data lokal, dan prompt injection.
-- [ ] Siapkan ikon, dokumentasi, lisensi, dan paket rilis.
-- [ ] Transfer ke NusaSec setelah review kesiapan dan instruksi pemilik.
+- Broaden installed Chrome and Firefox end-to-end coverage.
+- Improve pagination and collapsed-detail handling.
+- Add parser fixtures for additional program layouts.
+- Complete Chrome Web Store review and Firefox signing.
+- Consider a NusaSec transfer only on the owner’s instruction.
