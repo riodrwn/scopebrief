@@ -26,6 +26,12 @@
 
 ---
 
+## Demo
+
+[![ScopeBrief demo: capture, review, and export](docs/assets/scopebrief-demo.gif)](https://riodrwn.github.io/scopebrief/assets/scopebrief-demo.mp4)
+
+[Watch the MP4](https://riodrwn.github.io/scopebrief/assets/scopebrief-demo.mp4) · 14 seconds · HackerOne walkthrough recorded with build 0.6.3.
+
 ## From program page to research context
 
 ScopeBrief turns selected content from bug bounty program pages into a readable brief. It keeps asset scope labels, vulnerability exclusions, and testing instructions together so you can review the context before using it in your workflow.
