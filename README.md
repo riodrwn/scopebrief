@@ -48,4 +48,4 @@ Load dist/chrome or dist/firefox. Runtime scripts have no external dependencies;
 
 ## Author
 
-© [riodrwn](https://github.com/riodrwn). Independent project; not affiliated with the supported platforms. No NusaSec transfer has been performed.
+© [riodrwn](https://github.com/riodrwn). Independent project.
