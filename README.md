@@ -6,13 +6,13 @@
 
   <p>
     <a href="https://github.com/riodrwn/scopebrief/releases/tag/v1.0.0"><img src="https://img.shields.io/badge/release-v1.0.0-5B8CFF?style=flat-square" alt="Release v1.0.0"></a>
-    <img src="https://img.shields.io/badge/Chrome-Manifest_V3-5B8CFF?style=flat-square" alt="Chrome Manifest V3">
+    <a href="https://chromewebstore.google.com/detail/scopebrief/cegkdgaginaaocbdnghmphpgdoomgabh"><img src="https://img.shields.io/badge/Chrome_Web_Store-Available-5B8CFF?style=flat-square" alt="Available on the Chrome Web Store"></a>
     <img src="https://img.shields.io/badge/Firefox-140%2B-5B8CFF?style=flat-square" alt="Firefox 140 or newer">
     <img src="https://img.shields.io/badge/exports-Markdown_%2B_JSON-5B8CFF?style=flat-square" alt="Markdown and JSON exports">
   </p>
 
   <p>
-    <a href="https://github.com/riodrwn/scopebrief/releases/download/v1.0.0/scopebrief-chrome.zip"><strong>Download for Chrome</strong></a>
+    <a href="https://chromewebstore.google.com/detail/scopebrief/cegkdgaginaaocbdnghmphpgdoomgabh"><strong>Install from Chrome Web Store</strong></a>
     &nbsp; · &nbsp;
     <a href="https://github.com/riodrwn/scopebrief/releases/download/v1.0.0/scopebrief-firefox.zip"><strong>Download for Firefox</strong></a>
   </p>
@@ -57,9 +57,11 @@ ScopeBrief turns selected content from bug bounty program pages into a readable 
 
 ## Installation
 
-Download the ZIP for your browser from the [v1.0.0 release](https://github.com/riodrwn/scopebrief/releases/tag/v1.0.0), then follow the steps below.
+**Chrome (recommended):** [Install ScopeBrief from the Chrome Web Store](https://chromewebstore.google.com/detail/scopebrief/cegkdgaginaaocbdnghmphpgdoomgabh). Click **Add to Chrome**, confirm the installation, then pin ScopeBrief to your toolbar.
 
-<details open>
+For manual Chrome installation or Firefox temporary installation, download the ZIP for your browser from the [v1.0.0 release](https://github.com/riodrwn/scopebrief/releases/tag/v1.0.0) and follow the steps below.
+
+<details>
 <summary><strong>Chrome — load unpacked</strong></summary>
 
 1. Extract **scopebrief-chrome.zip** into a folder you will keep.
@@ -83,7 +85,7 @@ Requires **Firefox 140+**. Temporary installation lasts until browser restart. P
 
 </details>
 
-These GitHub packages are development-installable builds. A GitHub release does not indicate Chrome Web Store or Mozilla Add-ons approval.
+The GitHub ZIP packages are provided for manual installation. For Chrome, use the Chrome Web Store link above for regular installation and automatic updates.
 
 ## Privacy by design
 
