@@ -7,14 +7,14 @@
   <p>
     <a href="https://github.com/riodrwn/scopebrief/releases/tag/v1.0.0"><img src="https://img.shields.io/badge/release-v1.0.0-5B8CFF?style=flat-square" alt="Release v1.0.0"></a>
     <a href="https://chromewebstore.google.com/detail/scopebrief/cegkdgaginaaocbdnghmphpgdoomgabh"><img src="https://img.shields.io/badge/Chrome_Web_Store-Available-5B8CFF?style=flat-square" alt="Available on the Chrome Web Store"></a>
-    <img src="https://img.shields.io/badge/Firefox-140%2B-5B8CFF?style=flat-square" alt="Firefox 140 or newer">
+    <a href="https://addons.mozilla.org/en-GB/firefox/addon/scopebrief/"><img src="https://img.shields.io/badge/Firefox_Add--ons-Available-5B8CFF?style=flat-square" alt="Available on Firefox Add-ons"></a>
     <img src="https://img.shields.io/badge/exports-Markdown_%2B_JSON-5B8CFF?style=flat-square" alt="Markdown and JSON exports">
   </p>
 
   <p>
     <a href="https://chromewebstore.google.com/detail/scopebrief/cegkdgaginaaocbdnghmphpgdoomgabh"><strong>Install from Chrome Web Store</strong></a>
     &nbsp; · &nbsp;
-    <a href="https://github.com/riodrwn/scopebrief/releases/download/v1.0.0/scopebrief-firefox.zip"><strong>Download for Firefox</strong></a>
+    <a href="https://addons.mozilla.org/en-GB/firefox/addon/scopebrief/"><strong>Install from Firefox Add-ons</strong></a>
   </p>
   <p>
     <a href="https://riodrwn.github.io/scopebrief/">Website</a> ·
@@ -59,6 +59,8 @@ ScopeBrief turns selected content from bug bounty program pages into a readable 
 
 **Chrome (recommended):** [Install ScopeBrief from the Chrome Web Store](https://chromewebstore.google.com/detail/scopebrief/cegkdgaginaaocbdnghmphpgdoomgabh). Click **Add to Chrome**, confirm the installation, then pin ScopeBrief to your toolbar.
 
+**Firefox (recommended):** [Install ScopeBrief from Firefox Add-ons](https://addons.mozilla.org/en-GB/firefox/addon/scopebrief/). Click **Add to Firefox** and confirm the installation. Requires **Firefox 140+**.
+
 For manual Chrome installation or Firefox temporary installation, download the ZIP for your browser from the [v1.0.0 release](https://github.com/riodrwn/scopebrief/releases/tag/v1.0.0) and follow the steps below.
 
 <details>
@@ -81,11 +83,11 @@ To update, replace the extension files and click **Reload** on its extension car
 3. Click **Load Temporary Add-on** and select `manifest.json`.
 4. Open a supported program page and launch ScopeBrief.
 
-Requires **Firefox 140+**. Temporary installation lasts until browser restart. Permanent distribution requires Mozilla signing.
+Requires **Firefox 140+**. This temporary installation lasts until browser restart. Use the Firefox Add-ons link above for a regular installation.
 
 </details>
 
-The GitHub ZIP packages are provided for manual installation. For Chrome, use the Chrome Web Store link above for regular installation and automatic updates.
+The GitHub ZIP packages are provided for manual installation. Use the Chrome Web Store or Firefox Add-ons links above for regular installation and automatic updates.
 
 ## Privacy by design
 
