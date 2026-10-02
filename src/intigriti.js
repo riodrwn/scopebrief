@@ -2,9 +2,14 @@
  const text=e=>(e?.textContent||'').replace(/\s+/g,' ').trim();
  function capture(doc=document,url=location.href){
   const u=new URL(url);
-  if(u.hostname!=='app.intigriti.com'||!/^\/programs\/[^/]+\/[^/]+\/detail\/?$/.test(u.pathname))throw Error('Open an Intigriti program Detail page.');
+  if(u.hostname!=='app.intigriti.com'||!/^\/(?:researcher\/)?programs\/[^/]+\/[^/]+\/detail\/?$/.test(u.pathname))throw Error('Open an Intigriti program Detail page.');
   const boxes=[...doc.querySelectorAll('main .detail-box')];
-  const box=heading=>boxes.find(e=>text(e.querySelector('.detail-header')).toLowerCase()===heading.toLowerCase());
+  const headingText=element=>{
+  const header=element.querySelector('.detail-header')?.cloneNode(true);
+  header?.querySelectorAll('button,a,[role=button],svg,[aria-hidden=true]').forEach(control=>control.remove());
+  return text(header).toLowerCase();
+ };
+ const box=heading=>boxes.find(e=>headingText(e)===heading.toLowerCase());
   const assetsBox=box('Assets');
   if(!assetsBox)throw Error('Assets have not loaded or the Intigriti layout has changed.');
   const warnings=[],sections=[],block=globalThis.ScopeBriefBugcrowd.block;
@@ -32,7 +37,7 @@
   if(filters?.value||[...assetsBox.querySelectorAll('.filter .value')].some(e=>text(e)!=='All'))warnings.push('Asset filters are active; only currently loaded targets were captured.');
   const pagination=text(assetsBox).match(/\b\d+\s*[-–]\s*\d+\s+of\s+[\d,]+\b/)?.[0]||null;
   if(pagination)warnings.push('Only loaded asset rows were captured ('+pagination+').');
-  return {url:u.origin+u.pathname,title:doc.title,program_name:doc.title.split(/\s+-\s+/)[0]||u.pathname.split('/')[3],adapter:'intigriti_v1',kind:'program',method:'rendered_document',captured_at:new Date().toISOString(),assets,sections,warnings,links:[],pagination,text_length:JSON.stringify({assets,sections}).length};
+  return {url:u.origin+u.pathname,title:doc.title,program_name:doc.title.split(/\s+-\s+/)[0]||u.pathname.split('/').filter(Boolean).at(-2),adapter:'intigriti_v1',kind:'program',method:'rendered_document',captured_at:new Date().toISOString(),assets,sections,warnings,links:[],pagination,text_length:JSON.stringify({assets,sections}).length};
  }
  globalThis.ScopeBriefIntigriti={capture};
 })();

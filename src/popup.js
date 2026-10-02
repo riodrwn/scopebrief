@@ -30,6 +30,7 @@ $('capture').onclick=async()=>{
   const [tab]=await api.tabs.query({active:true,currentWindow:true});if(!tab?.id)throw Error('No active tab.');
   show('Fetching program guidelines and scope…');
   const results=await api.scripting.executeScript({target:{tabId:tab.id},files:['bugcrowd.js','hackerone.js','yeswehack.js','intigriti.js','capture.js']});const capture=results[0]?.result;
+  if(capture?.capture_error)throw Error(capture.capture_error);
   if(!capture?.text_length)throw Error('No readable content. Wait for the page to finish loading.');
   const program=identity(capture.url);
   const u=new URL(capture.url);capture.key=u.origin+u.pathname+u.search+u.hash+'|'+capture.kind+'|'+(capture.pagination||'');
