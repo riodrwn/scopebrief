@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.1 — 2026-10-02
+
+- Support Intigriti researcher program detail URLs after login.
+- Ignore feedback buttons when identifying Intigriti section headings.
+- Show parser errors instead of a generic empty-content message.
+
 ## 1.0.0 — 2026-09-27
 
 - First public release for HackerOne, Bugcrowd, YesWeHack, and Intigriti.
